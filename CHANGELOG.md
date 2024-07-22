@@ -1,3 +1,6 @@
+# [1.0.0] - Update the hole project with flutter version 3.22.3 Library
+* Update all the lib with latest version 3.22.3
+
 # [0.3.0] - Audio Support and Task Library
 * Added support for audio-cases.
 * Task Library for Text based applications.

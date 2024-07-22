@@ -25,7 +25,7 @@ class ResizeWithCropOrPadOp implements ImageOperator {
   /// You can pass whith [_cropLeft] and [_cropTop] top-left position of a crop to overide the default centered one.
   ResizeWithCropOrPadOp(this._targetHeight, this._targetWidth,
       [this._cropLeft, this._cropTop])
-      : _output = Image(_targetWidth, _targetHeight);
+      : _output = Image(width: _targetWidth, height: _targetHeight);
 
   /// Applies the defined resizing with cropping or/and padding on [image] and returns the
   /// result.
@@ -127,9 +127,9 @@ class ResizeWithCropOrPadOp implements ImageOperator {
     // Check crop position input if both provided
     if (_cropLeft != null && _cropTop != null) {
       // Return an error if the crop position is outside of the image
-      if ((_cropLeft! + _targetWidth > w) || (_cropTop! + _targetHeight > h)) {
-        int leftWidth = _cropLeft! + _targetWidth;
-        int bottomHeight = _cropTop! + _targetHeight;
+      if ((_cropLeft + _targetWidth > w) || (_cropTop + _targetHeight > h)) {
+        int leftWidth = _cropLeft + _targetWidth;
+        int bottomHeight = _cropTop + _targetHeight;
         throw ArgumentError(
             "The crop position is outside the image : crop(x:x+cropWidth,y+cropHeight) = ($_cropLeft:$leftWidth, $_cropTop:$bottomHeight) not in imageSize(x,y) = ($w, $h)");
       }

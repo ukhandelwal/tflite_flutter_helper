@@ -2,9 +2,9 @@ import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
 
-class TfLiteNLClassifier extends Opaque {}
+sealed class TfLiteNLClassifier extends Opaque {}
 
-class TfLiteNLClassifierOptions extends Struct {
+sealed class TfLiteNLClassifierOptions extends Struct {
   @Int32()
   external int inputTensorIndex;
 
@@ -40,23 +40,23 @@ class TfLiteNLClassifierOptions extends Struct {
   }
 }
 
-class TfLiteCategories extends Struct {
+sealed class TfLiteCategories extends Struct {
   @Int32()
   external int size;
 
   external Pointer<TfLiteCategory> categories;
 }
 
-class TfLiteCategory extends Struct {
+sealed class TfLiteCategory extends Struct {
   external Pointer<Utf8> text;
 
   @Double()
   external double score;
 }
 
-class TfLiteBertNLClassifier extends Opaque {}
+sealed class TfLiteBertNLClassifier extends Opaque {}
 
-class TfLiteBertNLClassifierOptions extends Struct {
+sealed class TfLiteBertNLClassifierOptions extends Struct {
   @Int32()
   external int maxSeqLen;
 

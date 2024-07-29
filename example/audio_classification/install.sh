@@ -6,7 +6,7 @@ cd "$(dirname "$(readlink -f "$0")")"
 # 2.5, 2.4.1
 
 TF_VERSION=2.5
-URL="https://github.com/ukhandelwal/tflite_flutter_plugin/releases/download/"
+URL="https://github.com/am15h/tflite_flutter_plugin/releases/download/"
 TAG="tf_$TF_VERSION"
 
 ANDROID_DIR="android/app/src/main/jniLibs/"

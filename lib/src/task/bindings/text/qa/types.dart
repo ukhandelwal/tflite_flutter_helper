@@ -2,9 +2,9 @@ import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
 
-sealed class TfLiteBertQuestionAnswerer extends Opaque {}
+class TfLiteBertQuestionAnswerer extends Opaque {}
 
-sealed class TfLiteQaAnswer extends Struct {
+class TfLiteQaAnswer extends Struct {
   @Int32()
   external int start;
   @Int32()
@@ -15,7 +15,7 @@ sealed class TfLiteQaAnswer extends Struct {
   external Pointer<Utf8> text;
 }
 
-sealed class TfLiteQaAnswers extends Struct {
+class TfLiteQaAnswers extends Struct {
   @Int32()
   external int size;
 

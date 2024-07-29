@@ -45,6 +45,7 @@ class ImageConversions {
     grayscale.assertShape(shape);
 
     final image = Image.fromBytes(
+        format: Format.uint32,
         width: grayscale.getWidth(shape),
         height: grayscale.getHeight(shape),
         bytes: uint8Buffer.getBuffer());

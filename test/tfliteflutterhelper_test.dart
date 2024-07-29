@@ -161,7 +161,7 @@ void main() {
         late TensorImage tensorImage = TensorImage();
 
         tensorImage.loadRgbPixels(
-            image.getBytes(format: Format.rgb), [inputHeight, inputWidth, 3]);
+            image.getBytes(order: ChannelOrder.rgb), [inputHeight, inputWidth, 3]);
 
         expect(tensorImage.image.height, inputHeight);
         expect(tensorImage.image.width, inputWidth);
@@ -181,9 +181,9 @@ void main() {
         tensorbuffer = tensorImage.tensorBuffer;
         expect(tensorbuffer, isNotNull);
         expect(tensorbuffer.getFlatSize(),
-            image.getBytes(format: Format.rgb).length);
+            image.getBytes(order: ChannelOrder.rgb).length);
         expect(tensorbuffer.getIntList().length,
-            image.getBytes(format: Format.rgb).length);
+            image.getBytes(order: ChannelOrder.rgb).length);
       });
 
       test('fromTensorBuffer', () {

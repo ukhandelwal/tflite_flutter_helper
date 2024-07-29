@@ -5,7 +5,7 @@ import 'tensorbuffer.dart';
 
 /// Represents data buffer with float(double) values.
 class TensorBufferFloat extends TensorBuffer {
-  static const TensorType DATA_TYPE = TensorType.float32;
+  TensorType DATA_TYPE = TensorType.float32;
 
   /// Creates a [TensorBufferFloat] with specified [shape].
   ///

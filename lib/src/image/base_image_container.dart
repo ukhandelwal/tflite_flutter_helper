@@ -20,7 +20,7 @@ abstract class BaseImageContainer {
 
   /// Gets the {@link TensorBuffer} representation with the specific {@code dataType} of the
   /// underlying image format.
-  TensorBuffer getTensorBuffer(TfLiteType dataType);
+  TensorBuffer getTensorBuffer(TensorType dataType);
 
   /// Gets the {@link Image} representation of the underlying image format. */
   CameraImage get mediaImage;

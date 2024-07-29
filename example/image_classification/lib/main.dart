@@ -52,8 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future getImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     setState(() {
       _image = File(pickedFile!.path);
       _imageWidget = Image.file(_image!);

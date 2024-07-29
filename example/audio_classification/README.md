@@ -19,7 +19,7 @@ Clone TFLite Flutter Helper repository to your computer to get the demo
 application.
 
 ```
-git clone https://github.com/am15h/tflite_flutter_helper
+git clone https://github.com/ukhandelwal/tflite_flutter_helper
 ```
 
 ### Step 2. Run the application

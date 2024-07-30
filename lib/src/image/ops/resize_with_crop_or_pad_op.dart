@@ -25,7 +25,7 @@ class ResizeWithCropOrPadOp implements ImageOperator {
   /// You can pass whith [_cropLeft] and [_cropTop] top-left position of a crop to overide the default centered one.
   ResizeWithCropOrPadOp(this._targetHeight, this._targetWidth,
       [this._cropLeft, this._cropTop])
-      : _output = Image(_targetWidth, _targetHeight);
+      : _output = Image(width: _targetWidth, height: _targetHeight);
 
   /// Applies the defined resizing with cropping or/and padding on [image] and returns the
   /// result.
@@ -63,7 +63,7 @@ class ResizeWithCropOrPadOp implements ImageOperator {
       // custom crop position. First item of the tuple represent the desired position for left position
       // and the second item the right position
       Tuple2<int, int> cropPos =
-          _computeCropPosition(_targetWidth, w, cropWidthCustomPosition);
+      _computeCropPosition(_targetWidth, w, cropWidthCustomPosition);
       srcL = cropPos.item1;
       srcR = cropPos.item2;
     }
@@ -80,7 +80,7 @@ class ResizeWithCropOrPadOp implements ImageOperator {
       // custom crop position. First item of the tuple represent the desired position for top position
       // and the second item the bottom position
       Tuple2<int, int> cropPos =
-          _computeCropPosition(_targetHeight, h, cropHeightCustomPosition);
+      _computeCropPosition(_targetHeight, h, cropHeightCustomPosition);
       srcT = cropPos.item1;
       srcB = cropPos.item2;
     }
@@ -159,14 +159,14 @@ class ResizeWithCropOrPadOp implements ImageOperator {
 
   Image _drawImage(Image dst, Image src,
       {int? dstX,
-      int? dstY,
-      int? dstW,
-      int? dstH,
-      int? srcX,
-      int? srcY,
-      int? srcW,
-      int? srcH,
-      bool blend = false}) {
+        int? dstY,
+        int? dstW,
+        int? dstH,
+        int? srcX,
+        int? srcY,
+        int? srcW,
+        int? srcH,
+        bool blend = false}) {
     dstX ??= 0;
     dstY ??= 0;
     srcX ??= 0;

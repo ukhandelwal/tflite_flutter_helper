@@ -36,7 +36,7 @@ void main() {
 
       test('static', () {
         late TensorBuffer tensorBuffer =
-            TensorBuffer.createFixedSize([1, 3, 2], TfLiteType.uint8);
+        TensorBuffer.createFixedSize([1, 3, 2], TfLiteType.uint8);
         ByteBuffer buffer = Uint8List.fromList([1, 2, 3, 4, 5, 6]).buffer;
         tensorBuffer.loadBuffer(buffer);
         expect(tensorBuffer.getIntList(), [1, 2, 3, 4, 5, 6]);
@@ -82,7 +82,7 @@ void main() {
 
       test('static', () {
         late TensorBuffer tensorBuffer =
-            TensorBuffer.createFixedSize([1, 2, 2], TfLiteType.float32);
+        TensorBuffer.createFixedSize([1, 2, 2], TfLiteType.float32);
         var bdata = ByteData(16);
 
         for (int i = 0, j = 1; i < 16; i += 4, j++)
@@ -96,7 +96,7 @@ void main() {
 
       test('load list int', () {
         late TensorBuffer tensorBuffer =
-            TensorBuffer.createFixedSize([1, 2, 2], TfLiteType.float32);
+        TensorBuffer.createFixedSize([1, 2, 2], TfLiteType.float32);
 
         tensorBuffer.loadList(<int>[1, 2, 3, 4], shape: [1, 2, 2]);
         expect(tensorBuffer.getDoubleList(), <double>[1, 2, 3, 4]);
@@ -105,7 +105,7 @@ void main() {
 
       test('load list float', () {
         late TensorBuffer tensorBuffer =
-            TensorBuffer.createFixedSize([1, 2, 2], TfLiteType.float32);
+        TensorBuffer.createFixedSize([1, 2, 2], TfLiteType.float32);
 
         tensorBuffer.loadList(<double>[1.0, 2.0, 3.0, 4.0], shape: [1, 2, 2]);
         expect(tensorBuffer.getDoubleList(), <double>[1.0, 2.0, 3.0, 4.0]);
@@ -124,11 +124,11 @@ void main() {
     group('ops', () {
       test('normalize', () {
         late TensorBuffer tensorBuffer =
-            TensorBuffer.createFixedSize([3], TfLiteType.float32);
+        TensorBuffer.createFixedSize([3], TfLiteType.float32);
         tensorBuffer.loadList(<double>[0, 255, 127.5], shape: [3]);
 
         final processor =
-            TensorProcessorBuilder().add(NormalizeOp(127.5, 127.5)).build();
+        TensorProcessorBuilder().add(NormalizeOp(127.5, 127.5)).build();
 
         tensorBuffer = processor.process(tensorBuffer);
 
@@ -160,8 +160,8 @@ void main() {
       test('load pixels', () {
         late TensorImage tensorImage = TensorImage();
 
-        tensorImage.loadRgbPixels(
-            image.getBytes(format: Format.rgb), [inputHeight, inputWidth, 3]);
+        tensorImage.loadRgbPixels(image.getBytes(order: ChannelOrder.rgb),
+            [inputHeight, inputWidth, 3]);
 
         expect(tensorImage.image.height, inputHeight);
         expect(tensorImage.image.width, inputWidth);
@@ -181,9 +181,9 @@ void main() {
         tensorbuffer = tensorImage.tensorBuffer;
         expect(tensorbuffer, isNotNull);
         expect(tensorbuffer.getFlatSize(),
-            image.getBytes(format: Format.rgb).length);
+            image.getBytes(order: ChannelOrder.rgb).length);
         expect(tensorbuffer.getIntList().length,
-            image.getBytes(format: Format.rgb).length);
+            image.getBytes(order: ChannelOrder.rgb).length);
       });
 
       test('fromTensorBuffer', () {
@@ -201,7 +201,7 @@ void main() {
             .build();
 
         TensorImage processedImage =
-            imageProcessor.process(TensorImage.fromImage(image));
+        imageProcessor.process(TensorImage.fromImage(image));
 
         expect(processedImage.height, h);
         expect(processedImage.width, w);
@@ -214,17 +214,17 @@ void main() {
             .build();
 
         TensorImage processedImage =
-            imageProcessor.process(TensorImage.fromImage(image));
+        imageProcessor.process(TensorImage.fromImage(image));
 
         expect(processedImage.height, w);
         expect(processedImage.width, h);
       });
       test('resize with crop', () {
         ImageProcessor imageProcessor =
-            ImageProcessorBuilder().add(ResizeWithCropOrPadOp(h, w)).build();
+        ImageProcessorBuilder().add(ResizeWithCropOrPadOp(h, w)).build();
 
         TensorImage processedImage =
-            imageProcessor.process(TensorImage.fromImage(image));
+        imageProcessor.process(TensorImage.fromImage(image));
 
         expect(processedImage.height, h);
         expect(processedImage.width, w);
@@ -236,7 +236,7 @@ void main() {
             .build();
 
         TensorImage processedImage =
-            imageProcessor.process(TensorImage.fromImage(image));
+        imageProcessor.process(TensorImage.fromImage(image));
 
         expect(processedImage.height, h);
         expect(processedImage.width, w);
@@ -251,7 +251,7 @@ void main() {
 
       test('resize with custom crop position outside image', () {
         ImageProcessor imageProcessor = ImageProcessorBuilder()
-            // the be sure we are outside we took the input size of the image and add 1 pixel
+        // the be sure we are outside we took the input size of the image and add 1 pixel
             .add(ResizeWithCropOrPadOp(h, w, inputWidth + 1, inputHeight + 1))
             .build();
 
@@ -262,7 +262,7 @@ void main() {
 
       test('resize with custom crop and one null argument', () {
         ImageProcessor imageProcessor = ImageProcessorBuilder()
-            // the be sure we are outside we took the input size of the image and add 1 pixel
+        // the be sure we are outside we took the input size of the image and add 1 pixel
             .add(ResizeWithCropOrPadOp(h, w, 0, null))
             .build();
 
@@ -273,21 +273,21 @@ void main() {
 
       test(
           'resize with custom a crop position that make a part of it outside the image',
-          () {
-        ImageProcessor imageProcessor = ImageProcessorBuilder()
+              () {
+            ImageProcessor imageProcessor = ImageProcessorBuilder()
             // the be sure that a part of the crop is outside the iamge we took the input size and substract crop size / 2
-            .add(ResizeWithCropOrPadOp(
+                .add(ResizeWithCropOrPadOp(
                 h, w, inputWidth - (w ~/ 2), inputHeight - (h ~/ 2)))
-            .build();
+                .build();
 
-        TensorImage sourceImage = TensorImage.fromImage(image);
-        expect(() => imageProcessor.process(sourceImage),
-            throwsA(isA<ArgumentError>()));
-      });
+            TensorImage sourceImage = TensorImage.fromImage(image);
+            expect(() => imageProcessor.process(sourceImage),
+                throwsA(isA<ArgumentError>()));
+          });
 
       test('resize with a negative a crop position', () {
         ImageProcessor imageProcessor = ImageProcessorBuilder()
-            // the be sure that a part of the crop is outside the iamge we took the input size and substract crop size / 2
+        // the be sure that a part of the crop is outside the iamge we took the input size and substract crop size / 2
             .add(ResizeWithCropOrPadOp(h, w, -100, -10))
             .build();
 
@@ -300,10 +300,10 @@ void main() {
         int h = 3000;
         int w = 4000;
         ImageProcessor imageProcessor =
-            ImageProcessorBuilder().add(ResizeWithCropOrPadOp(h, w)).build();
+        ImageProcessorBuilder().add(ResizeWithCropOrPadOp(h, w)).build();
 
         TensorImage processedImage =
-            imageProcessor.process(TensorImage.fromImage(image));
+        imageProcessor.process(TensorImage.fromImage(image));
 
         expect(processedImage.height, h);
         expect(processedImage.width, w);
@@ -311,7 +311,7 @@ void main() {
 
       test('inverse transform', () {
         ImageProcessor imageProcessor =
-            ImageProcessorBuilder().add(Rot90Op(2)).build();
+        ImageProcessorBuilder().add(Rot90Op(2)).build();
 
         final p = imageProcessor.inverseTransform(
             m.Point(image.width / 2, image.height / 2),
@@ -323,10 +323,10 @@ void main() {
 
       test('tensor operator wrapper', () {
         ImageProcessor imageProcessor =
-            ImageProcessorBuilder().add(NormalizeOp(127.5, 127.5)).build();
+        ImageProcessorBuilder().add(NormalizeOp(127.5, 127.5)).build();
 
         TensorImage processedImage =
-            imageProcessor.process(TensorImage.fromImage(image));
+        imageProcessor.process(TensorImage.fromImage(image));
 
         for (var i in processedImage.tensorBuffer.getDoubleList()) {
           expect(-1 <= i && i <= 1, true);
@@ -334,10 +334,10 @@ void main() {
       });
       test('tensor operator wrapper', () {
         ImageProcessor imageProcessor =
-            ImageProcessorBuilder().add(NormalizeOp(0, 1)).build();
+        ImageProcessorBuilder().add(NormalizeOp(0, 1)).build();
 
         TensorImage processedImage =
-            imageProcessor.process(TensorImage.fromImage(image));
+        imageProcessor.process(TensorImage.fromImage(image));
 
         for (var i in processedImage.tensorBuffer.getDoubleList()) {
           expect(0 <= i && i <= 255, true);

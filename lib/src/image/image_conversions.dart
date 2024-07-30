@@ -114,7 +114,7 @@ class ImageConversions {
   //   }
   // }
 
-  static void convertImageToTensorBuffer(Image image, TensorBuffer buffer) {
+  static void convertImageToTensorBuffer1(Image image, TensorBuffer buffer) {
     int w = image.width;
     int h = image.height;
 
@@ -152,4 +152,50 @@ class ImageConversions {
             "${buffer.getDataType()} is unsupported with TensorBuffer.");
     }
   }
+
+  static void convertImageToTensorBuffer(Image image, TensorBuffer buffer) {
+    // Ensure image.data is not null and is of type Uint8List
+    if (image.data == null) {
+      throw StateError("image.data is null");
+    }
+
+    List<int> intValues;
+    if (image.data is Uint8List) {
+      intValues = (image.data as Uint8List).toList();
+    } else if (image.data is List<int>) {
+      intValues = image.data as List<int>;
+    } else {
+      throw StateError("image.data is not of type Uint8List or List<int>");
+    }
+
+    int w = image.width;
+    int h = image.height;
+    int flatSize = w * h * 3;
+    List<int> shape = [h, w, 3];
+
+    switch (buffer.getDataType()) {
+      case TfLiteType.uint8:
+        List<int> byteArr = List.filled(flatSize, 0);
+        for (int i = 0, j = 0; i < intValues.length; i++) {
+          byteArr[j++] = ((intValues[i]) & 0xFF);
+          byteArr[j++] = ((intValues[i] >> 8) & 0xFF);
+          byteArr[j++] = ((intValues[i] >> 16) & 0xFF);
+        }
+        buffer.loadList(byteArr, shape: shape);
+        break;
+      case TfLiteType.float32:
+        List<double> floatArr = List.filled(flatSize, 0.0);
+        for (int i = 0, j = 0; i < intValues.length; i++) {
+          floatArr[j++] = ((intValues[i]) & 0xFF).toDouble();
+          floatArr[j++] = ((intValues[i] >> 8) & 0xFF).toDouble();
+          floatArr[j++] = ((intValues[i] >> 16) & 0xFF).toDouble();
+        }
+        buffer.loadList(floatArr, shape: shape);
+        break;
+      default:
+        throw StateError(
+            "${buffer.getDataType()} is unsupported with TensorBuffer.");
+    }
+  }
+
 }

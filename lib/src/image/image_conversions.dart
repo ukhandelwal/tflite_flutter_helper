@@ -44,16 +44,17 @@ class ImageConversions {
     final grayscale = ColorSpaceType.GRAYSCALE;
     grayscale.assertShape(shape);
 
-    final image = img.Image.fromBytes(width: grayscale.getWidth(shape),
-      height: grayscale.getHeight(shape),bytes:  uint8Buffer.getBuffer(),
+    final image = img.Image.fromBytes(
+      width: grayscale.getWidth(shape),
+      height: grayscale.getHeight(shape), bytes: uint8Buffer.getBuffer(),
       // format: img.Format.l8
     );
 
     return image;
   }
 
-
-  static void convertImageToTensorBuffer(img.Image image, TensorBuffer buffer) {
+  static void convertImageToTensorBufferOld(
+      img.Image image, TensorBuffer buffer) {
     int w = image.width;
     int h = image.height;
     List<int> intValues = image.getBytes(order: img.ChannelOrder.rgb);
@@ -73,6 +74,50 @@ class ImageConversions {
       case TensorType.float32:
         List<double> floatArr = List.filled(flatSize, 0.0);
         for (int i = 0, j = 0; i < intValues.length; i += 3) {
+          floatArr[j++] = intValues[i].toDouble();
+          floatArr[j++] = intValues[i + 1].toDouble();
+          floatArr[j++] = intValues[i + 2].toDouble();
+        }
+        buffer.loadList(floatArr, shape: shape);
+        break;
+      default:
+        throw StateError(
+            "${buffer.getDataType()} is unsupported with TensorBuffer.");
+    }
+  }
+
+  static void convertImageToTensorBuffer(img.Image image, TensorBuffer buffer) {
+    int w = image.width;
+    int h = image.height;
+    List<int> intValues = image.getBytes(order: img.ChannelOrder.rgb);
+    int flatSize = w * h * 3;
+    List<int> shape = [h, w, 3];
+
+    print("Image dimensions: width = $w, height = $h");
+    print("Expected flat size: $flatSize");
+    print("intValues length: ${intValues.length}");
+
+    switch (buffer.getDataType()) {
+      case TensorType.uint8:
+        List<int> byteArr = List.filled(flatSize, 0);
+        for (int i = 0, j = 0; i < intValues.length; i += 3) {
+          if (j >= flatSize) {
+            print("Index out of bounds: j = $j, flatSize = $flatSize");
+            break;
+          }
+          byteArr[j++] = intValues[i];
+          byteArr[j++] = intValues[i + 1];
+          byteArr[j++] = intValues[i + 2];
+        }
+        buffer.loadList(byteArr, shape: shape);
+        break;
+      case TensorType.float32:
+        List<double> floatArr = List.filled(flatSize, 0.0);
+        for (int i = 0, j = 0; i < intValues.length; i += 3) {
+          if (j >= flatSize) {
+            print("Index out of bounds: j = $j, flatSize = $flatSize");
+            break;
+          }
           floatArr[j++] = intValues[i].toDouble();
           floatArr[j++] = intValues[i + 1].toDouble();
           floatArr[j++] = intValues[i + 2].toDouble();
